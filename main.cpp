@@ -40,29 +40,46 @@ class LRUCache : public Cache
 {
 private:
     int capacity;
+    int pointer = 0;
 public:
     LRUCache(int n)
     {
         this -> capacity = n;
         this-> head = new Node (0, 0);
+
         Node* current = head;
         for (int i = 0; i != n; i++)
         {
             Node* temp = new Node (0, 0);
             current -> next = temp;
             temp -> prev = current;
+            mp.emplace(i, temp);
             current = temp;
         }
         this -> tail = current;
     }
+    
     virtual void set(int a, int b)
     {
-        
+        if (this -> pointer == this -> capacity - 1 )
+        {
+            this -> pointer = 0;
+        }
+        this -> mp[this -> pointer] -> key = a;
+        this -> mp[this -> pointer] -> value = b;
+        this -> pointer++;
     }
     virtual int get(int f)
     {
-        int c = 8;
-        return c;
+        std::map<int, Node*>::iterator result = std::find_if(mp.begin(), mp.end(), [f](const std::pair<int, Node*>& el){ return el.second -> key == f; });
+        if (result == mp.end())
+        {
+            return -1;
+        }
+        else
+        {
+            return result -> second -> value;
+        }
     }
     ~LRUCache()
     {
@@ -82,8 +99,8 @@ int main() {
    int n, capacity, i;
    cin >> n >> capacity;
    LRUCache l(capacity);
-}
-/*   for(i = 0; i < n; i++) {
+
+   for(i = 0; i < n; i++) {
       string command;
       cin >> command;
       if(command == "get") {
@@ -98,4 +115,4 @@ int main() {
       }
    }
    return 0;
-}*/
+}
