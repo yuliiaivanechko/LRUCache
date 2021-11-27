@@ -39,12 +39,12 @@ class Cache
 class LRUCache : public Cache
 {
 private:
-    
+    int capacity;
 public:
     LRUCache(int n)
     {
-
-        Node* head = new Node (0, 0);
+        this -> capacity = n;
+        this-> head = new Node (0, 0);
         Node* current = head;
         for (int i = 0; i != n; i++)
         {
@@ -61,16 +61,29 @@ public:
     }
     virtual int get(int f)
     {
-        int c =8;
+        int c = 8;
         return c;
+    }
+    ~LRUCache()
+    {
+        for (std::size_t i = 0; i != this->capacity; ++i)
+        {
+            Node* temp = tail -> prev;
+            delete tail;
+            temp -> next = nullptr;
+            this -> tail = temp;
+        }
+        delete this -> head;
+        head = nullptr;
     }
 };
 
 int main() {
-   int n, capacity,i;
+   int n, capacity, i;
    cin >> n >> capacity;
    LRUCache l(capacity);
-   for(i=0;i<n;i++) {
+}
+/*   for(i = 0; i < n; i++) {
       string command;
       cin >> command;
       if(command == "get") {
@@ -85,4 +98,4 @@ int main() {
       }
    }
    return 0;
-}
+}*/
