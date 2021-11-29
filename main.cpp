@@ -45,7 +45,7 @@ public:
     LRUCache(int n)
     {
         this -> capacity = n;
-        this-> head = new Node (0, 0);
+        this -> head = new Node (0, 0);
 
         Node* current = head;
         for (int i = 0; i != n; i++)
@@ -65,9 +65,18 @@ public:
         {
             this -> pointer = 0;
         }
-        this -> mp[this -> pointer] -> key = a;
-        this -> mp[this -> pointer] -> value = b;
-        this -> pointer++;
+        std::map<int, Node*>::iterator result = std::find_if(mp.begin(), mp.end(), [a](const std::pair<int, Node*>& el){ return el.second -> key == a; });
+        if (result == mp.end())
+        {
+            this -> mp[this -> pointer] -> key = a;
+            this -> mp[this -> pointer] -> value = b;
+            this -> pointer++;
+        }
+        else
+        {
+            result -> second -> value = b;
+        }
+
     }
     virtual int get(int f)
     {
